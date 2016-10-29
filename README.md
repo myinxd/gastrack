@@ -1,6 +1,6 @@
 # gastrack
 
-This repository is the backup, in which a simple tool for tracking gas motion in galaxies collision (merging) is provided. In our work, the [Gadget](http://www.gadgetcode.org/) is utlized to simulate galaxies collision in the cluster namely `HCG 62`. 
+This repository is the backup, in which a simple tool for tracking gas motion in galaxies collision (merging) is provided. In our work, the [Gadget](http://www.gadgetcode.org/) is utlized to simulate galaxies collision in the cluster namely `HCG 62`, and simulated results are saved as [hdf5](https://support.hdfgroup.org/HDF5/) structure. 
 
 Two *PartTypes* are in this simulation, i.e. the gas and halo particles. We simulated the revolution of their massive density and motions, 
 so as to analyze its merging staffs. Thus, to precisedly track the motion lines of the two merging gas, a gas tracker is needed.
