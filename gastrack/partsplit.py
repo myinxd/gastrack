@@ -167,17 +167,17 @@ class PartSplit:
 
         filepart.close()
 
-        def get_multi_files(self):
-            """
-            Processing on multiple files.
-            """
-            # Init
-            files = os.listdir(self.input_dir)
-            files.sort()
-            # output
-            if not os.path.exists(self.output_dir):
-                os.mkdir(self.output_dir)
-            # Circle
-            for f in files:
-                if os.path.splitext(f)[-1] == '.hdf5':
-                    self.get_single_file(f)
+    def get_multi_files(self):
+        """
+        Processing on multiple files.
+        """
+        # Init
+        files = os.listdir(self.input_dir)
+        files.sort()
+        # output
+        if not os.path.exists(self.output_dir):
+            os.mkdir(self.output_dir)
+        # Circle
+        for f in files:
+            if os.path.splitext(f)[-1] == '.hdf5':
+                self.get_single_file(f)
