@@ -1,4 +1,5 @@
-# Author Zhixian MA <zxma_sjtu@qq.com>
+# Copyright (C) 2016 Zhixian MA <zxma_sjtu@qq.com>
+# MIT license
 
 """
 This module split simulated galaxy particles hdf5 file into two sub
