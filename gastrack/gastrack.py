@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-# Author: Zhixian MA <zxma_sjtu@qq.com>
+# Copyright (C) 2016 Zhixian MA <zxma_sjtu@qq.com>
+# MIT license
 #
 """
 A gas tracker to detect halo and gas peaks of the two merging galaxies.
