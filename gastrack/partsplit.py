@@ -22,8 +22,10 @@ class PartSplit:
         The direction holding those father hdf5 files.
     output_dir: string
         The direction to save output files.
-    numpart_main: int
-        Number of particles of the main cluster.
+    numgas: int
+        Number of gas particles of the main cluster.
+    numhalo: int
+        Number of halo particles of the main cluster.
 
     Methods
     -------
@@ -41,10 +43,11 @@ class PartSplit:
         https://docs.h5py.org
     """
 
-    def __init__(self, input_dir, output_dir, numpart_main=66985):
+    def __init__(self, input_dir, output_dir, numhalo=83499, numgas=81935):
         self.input_dir = input_dir
         self.output_dir = output_dir
-        self.numpart_main = numpart_main
+        self.numhalo = numhalo
+        self.numgas = numgas
 
     def load_hdf5(self, fname):
         """
@@ -90,9 +93,10 @@ class PartSplit:
         for key, value in filepart['Header'].attrs.items():
             header.attrs[key] = value
         # Change NumPart_Thisfile
-        numpart = partidx[0].shape[0]
+        numgas = partidx[0].shape[0]
+        numhalo = partidx[1].shape[0]
         # header.attrs['NumPaat_Total'] = [numpart,numpart,0,0,0,0]
-        header.attrs['NumPart_ThisFile'] = [numpart, numpart, 0, 0, 0, 0]
+        header.attrs['NumPart_ThisFile'] = [numgas, numhalo, 0, 0, 0, 0]
 
         # PartType0
         parttype0 = subpart.create_group('PartType0')
@@ -141,12 +145,12 @@ class PartSplit:
         # Indices
         # gas
         particle_gas = filepart['/PartType0/ParticleIDs']
-        gas_idx = np.where(particle_gas[:] < self.numpart_main)[0]
+        gas_idx = np.where(particle_gas[:] < self.numgas)[0]
         # halo
         particle_halo = filepart['/PartType1/ParticleIDs']
         numgas = particle_gas[:].shape[0]
         halo_idx = np.where(particle_halo[:] <
-                            self.numpart_main + numgas)[0]
+                            self.numhalo + numgas)[0]
         # idx
         partidx_c1 = (gas_idx, halo_idx)
         # split
@@ -156,10 +160,10 @@ class PartSplit:
         # cluster2
         # Indices
         # gas
-        gas_idx = np.where(particle_gas[:] > self.numpart_main)[0]
+        gas_idx = np.where(particle_gas[:] > self.numgas)[0]
         # halo
         halo_idx = np.where(particle_halo[:] >
-                            self.numpart_main + numgas)[0]
+                            self.numgas + numgas)[0]
         # idx
         partidx_c2 = (gas_idx, halo_idx)
         # split
