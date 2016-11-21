@@ -10,6 +10,9 @@ Previously, the strategy of peak detection in two dimensional images is utlized.
 
 Since that, we change our method. We separate the whole simulated particles into two subsets, in which each contained the particles belonging to its galaxy. Then, the location of paticles with the largest density is detected, and combined into the peak list we required. Finally, the two singly detected peak are marked onto the gas map. 
 
+## New tool 
+In order to compare and track particles of different clusters between different snaps (i.e. times), a new tool is added. By means of this, particles in regions of interested (ROI) are tracked. Thus, the detailed motivations and revolutions of the merging can be analyzed.  
+
 ## How to use it?
 - To use the code, some python packages are required. 
   - numpy
@@ -17,9 +20,14 @@ Since that, we change our method. We separate the whole simulated particles into
   - yt: processing simulated particles, making projection and plotting results.
 
 - Run the tool
+  - For gas tracking
   ```sh
   $ python3 gastrack.py <input_dir> <output_dir>
   ```
+  - For particles tracking
+  ```sh
+  $ python3 countParticles.py <snap_target> <snap_ref> <output_path> <numhalo> <num gas> \\
+    <radius_low> <radius_high> <angle_low> <angle_high>
 
 ## References
 - Collette, A.,"Python and HDF5", O'reilly, 2013.
