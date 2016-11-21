@@ -25,6 +25,7 @@ Since that, we change our method. We separate the whole simulated particles into
 - Collette, A.,"Python and HDF5", O'reilly, 2013.
 - h5py documents, https://docs.h5py.org
 - The yt project, https://yt-project.org
+- matplotlib, http://matplotlib.org/
 
 ## Author
 - Zhixian MA <`zxma_sjtu(at)qq.com`>
