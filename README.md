@@ -28,6 +28,7 @@ In order to compare and track particles of different clusters between different 
   ```sh
   $ python3 countParticles.py <snap_target> <snap_ref> <output_path> <numhalo> <num gas> \\
     <radius_low> <radius_high> <angle_low> <angle_high>
+  ```
 
 ## References
 - Collette, A.,"Python and HDF5", O'reilly, 2013.
