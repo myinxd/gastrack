@@ -133,7 +133,6 @@ def get_cls(filepath, numhalo, numgas):
 
     return maj_cls, min_cls
 
-
 def get_peak(maj_cls, step=0.005):
     """
     Generate maps, find peaks and save result.
@@ -152,10 +151,19 @@ def get_peak(maj_cls, step=0.005):
     """
     halo_z = utils.gen_mosaic(maj_cls.halo_cords, maj_cls.halo_den, step, 'z')
     peak_z = utils.get_peaks(halo_z, step)
-    peak = [peak_z[1], peak_z[2]]
+    # y direction
+    halo_y = utils.gen_mosaic(maj_cls.halo_cords, maj_cls.halo_den, step, 'y')
+    peak_y = utils.get_peaks(halo_y, step)
+    # x direction
+    halo_x = utils.gen_mosaic(maj_cls.halo_cords, maj_cls.halo_den, step, 'x')
+    peak_x = utils.get_peaks(halo_x, step)
+    # Combine
+    x = (peak_z[1] + peak_y[1]) / 2
+    y = (peak_z[2] + peak_x[1]) / 2
+    z = (peak_x[2] + peak_y[2]) / 2
+    peak = [x, y, z]
 
     return peak
-
 
 def calc_particles(maj_cls, min_cls, peak, reg_mode, reg_params):
     """
@@ -178,50 +186,23 @@ def calc_particles(maj_cls, min_cls, peak, reg_mode, reg_params):
         # parmaters
         x_c = peak[0]
         y_c = peak[1]
+        z_c = peak[2]
         radius = reg_params
         # maj
         maj_x = maj_cls.gas_cords[:, 0] - x_c
         maj_y = maj_cls.gas_cords[:, 1] - y_c
+        maj_z = maj_cls.gas_cords[:, 2] - z_c
         # maj_z = maj_cls.gas_cords[:,2]
-        maj_dist = np.sqrt(maj_x**2 + maj_y**2)
+        maj_dist = np.sqrt(maj_x**2 + maj_y**2 + maj_z**2)
         maj_idx = maj_dist <= radius
         part_maj = maj_idx.sum()
         # min
-        min_x = min_cls.gas_cords[:, 0]
-        min_y = min_cls.gas_cords[:, 1]
+        min_x = min_cls.gas_cords[:, 0] - x_c
+        min_y = min_cls.gas_cords[:, 1] - y_c
+        min_z = min_cls.gas_cords[:, 2] - z_c
         # min_z = min_cls.gas_cords[:,2]
-        min_dist = np.sqrt(min_x**2 + min_y**2)
+        min_dist = np.sqrt(min_x**2 + min_y**2 + min_z**2)
         min_idx = min_dist <= radius
-        part_min = min_idx.sum()
-        # sum
-        part_total = part_maj + part_min
-    elif reg_mode == 'elp':
-        # parmaters
-        x_p = peak[0]
-        y_p = peak[1]
-        # elp params
-        dist_ctr = reg_params[0]
-        angle = reg_params[1] / 180 * np.pi
-        axis_maj = reg_params[2]
-        axis_min = reg_params[3]
-        # elp center
-        x_c = x_p + dist_ctr * np.sin(angle)
-        y_c = y_p - dist_ctr * np.cos(angle)
-        # maj
-        x = (maj_cls.gas_cords[:, 0] - x_c)
-        y = (maj_cls.gas_cords[:, 1] - y_c)
-        maj_x = x * np.cos(angle) + y * np.sin(angle)
-        maj_y = -x * np.sin(angle) + y * np.cos(angle)
-        maj_dist = np.sqrt(maj_x**2 / axis_maj**2 + maj_y**2 / axis_min**2)
-        maj_idx = maj_dist <= 1
-        part_maj = maj_idx.sum()
-        # min
-        x = (min_cls.gas_cords[:, 0] - x_c)
-        y = (min_cls.gas_cords[:, 1] - y_c)
-        min_x = x * np.cos(angle) + y * np.sin(angle)
-        min_y = -x * np.sin(angle) + y * np.cos(angle)
-        min_dist = np.sqrt(min_x**2 / axis_min**2 + min_y**2 / axis_min**2)
-        min_idx = min_dist <= 1
         part_min = min_idx.sum()
         # sum
         part_total = part_maj + part_min
@@ -229,6 +210,7 @@ def calc_particles(maj_cls, min_cls, peak, reg_mode, reg_params):
         # parmaters
         x_c = peak[0]
         y_c = peak[1]
+        z_c = peak[2]
         radius_low = reg_params[0]
         radius_high = reg_params[1]
         angle_low = reg_params[2]
@@ -254,8 +236,9 @@ def calc_particles(maj_cls, min_cls, peak, reg_mode, reg_params):
             # maj
             maj_x = maj_cls.gas_cords[:, 0] - x_c
             maj_y = maj_cls.gas_cords[:, 1] - y_c
+            maj_z = maj_cls.gas_cords[:, 2] - z_c
             # maj_z = maj_cls.gas_cords[:,2]
-            maj_dist = np.sqrt(maj_x**2 + maj_y**2)
+            maj_dist = np.sqrt(maj_x**2 + maj_y**2 + maj_z**2)
             maj_ang = np.arcsin(np.abs(maj_y) / maj_dist)
             maj_idx_dist = (maj_dist <= radius_high) * (maj_dist >= radius_low)
             # Quarant1
@@ -282,8 +265,8 @@ def calc_particles(maj_cls, min_cls, peak, reg_mode, reg_params):
             # min
             min_x = min_cls.gas_cords[:, 0] - x_c
             min_y = min_cls.gas_cords[:, 1] - y_c
-            # min_z = min_cls.gas_cords[:,2]
-            min_dist = np.sqrt(min_x**2 + min_y**2)
+            min_z = min_cls.gas_cords[:, 2] - z_c
+            min_dist = np.sqrt(min_x**2 + min_y**2 + min_z**2)
             min_ang = np.arcsin(np.abs(min_y) / min_dist)
             min_idx_dist = (min_dist <= radius_high) * (min_dist >= radius_low)
             # Quarant1
@@ -317,7 +300,6 @@ def calc_particles(maj_cls, min_cls, peak, reg_mode, reg_params):
 
     return partlist, maj_idx, min_idx
 
-
 def main(argv):
     """The main method"""
     # Init
@@ -342,7 +324,6 @@ def main(argv):
     # get peak
     peak1 = get_peak(maj_cls_f1, step)
     peak2 = get_peak(maj_cls_f2, step)
-    # peak2 = peak1
     # Calc particles of file2
     print('Searching for particles at %.2f Gyr ...' % (snapid2 * 0.02))
     part_ori, maj_idx_f2, min_idx_f2 = calc_particles(maj_cls_f2,
