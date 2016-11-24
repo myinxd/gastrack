@@ -13,6 +13,14 @@ Since that, we change our method. We separate the whole simulated particles into
 ## New tool 
 In order to compare and track particles of different clusters between different snaps (i.e. times), a new tool is added. By means of this, particles in regions of interested (ROI) are tracked. Thus, the detailed motivations and revolutions of the merging can be analyzed.  
 
+## Matlab code
+Scripts written in matlab style is provided, which can be fetched from [matcode](https://github.com/myinxd/gastrack/tree/master/matcode). And usage of these codes is embedded in these scripts.
+You can type `help func_name` at matlab's `commind window` for details.
+
+```matlab
+   >> help func_name
+```
+
 ## How to use it?
 - To use the code, some python packages are required. 
   - numpy
