@@ -8,7 +8,12 @@ so as to analyze its merging staffs. Thus, to precisedly track the motion lines 
 ## Method
 Previously, the strategy of peak detection in two dimensional images is utlized. However, there were three parameters should be tuned, which were the `neighbors`,`peak threshold` and `number of peaks`. After several times of experiments, we can't find any group for all of them to get the optimum result, especially for the time that two galxies were nearly merged to one.
 
-Since that, we change our method. We separate the whole simulated particles into two subsets, in which each contained the particles belonging to its galaxy. Then, the location of paticles with the largest density is detected, and combined into the peak list we required. Finally, the two singly detected peak are marked onto the gas map. 
+Since that, we change our method. We separate the whole simulated particles into two subsets, in which each contained the particles belonging to its galaxy. Then, the location of paticles with the largest density is detected, and combined into the peak list we required. Finally, the two singly detected peak are marked onto the gas map, and an example image is as follows. 
+
+<center>
+<img src="https://github.com/myinxd/gastrack/blob/master/example/gas_example.png" width=400 />
+Fig1. Gas density projection example
+</center>
 
 ## New tool 
 In order to compare and track particles of different clusters between different snaps (i.e. times), a new tool is added. By means of this, particles in regions of interested (ROI) are tracked. Thus, the detailed motivations and revolutions of the merging can be analyzed.  
