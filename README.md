@@ -12,7 +12,6 @@ Since that, we change our method. We separate the whole simulated particles into
 
 <center>
 <img src="https://github.com/myinxd/gastrack/blob/master/example/gas_example.png" width=400 />
-Fig1. Gas density projection example
 </center>
 
 ## New tool 
