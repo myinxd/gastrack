@@ -1,4 +1,16 @@
 # Copyright (C) 2017 Zhixian MA <zxma_sjtu@qq.com>
+
+"""
+Update
+======
+[2017-09-08]: Hide labels and ticks of both x and y axes.
+[2017-09-08]: Hide label of colorbar
+[2017-09-08]: Add scale of the image at the southwest.
+
+Reference
+=========
+http://matplotlib.org/examples/axes_grid/demo_edge_colorbar.html?highlight=cbar
+"""
 import os
 import shutil
 import yt
@@ -60,7 +72,7 @@ def main(argv):
     fig = plt.figure(figsize=(3,1))
     grid = AxesGrid(fig,rect=(0.1,0.1,0.8,0.8),
                     nrows_ncols = (1, 3),
-                    axes_pad = 0.05,
+                    axes_pad = 0.03,
                     label_mode = "L",
                     share_all = True,
                     cbar_location="right",
@@ -126,12 +138,24 @@ def main(argv):
         peak_maj,peak_min = get_peak(fn,gt,ps,snap)
         peak_maj.shape
 
-        grid[i].axes.text(x=-0.35,y=0.3, s='%s=%.2f Gyr' %(t, snap*0.02),fontdict={"size":10,"color":"white"})
+        x = np.linspace(0.235,0.31,20)
+        y = -0.33 * np.ones(x.shape)
+        
+        grid[i].axes.text(x=-0.35,y=0.3, s='%s=%.2f Gyr' %(t, snap*0.02),fontdict={"size":10,"color":"white","weight":'bold'})
         if case_flag == '1':
-            grid[i].axes.text(x= 0.2,y=0.3, s=case_dict[i], fontdict={"size":10,"color":"white"})
+            grid[i].axes.text(x= 0.2,y=0.3, s=case_dict[i], fontdict={"size":10,"color":"white","weight":'bold'})
+        grid[i].axes.text(x= 0.19, y=-0.3, s="100 kpc", fontdict={"size":10,"color":"white","weight":'bold'})
+        grid[i].axes.plot(x,y,'w-')
         grid[i].scatter(peak_maj[1],peak_maj[2],s=100, c='b', marker='x')
         grid[i].scatter(peak_min[1],peak_min[2],s=80, c='r', marker='+')
-        grid[i].set_xticks([-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3])
+        grid[i].set_xticks([])
+        grid[i].set_ylabel("")
+        grid[i].set_xlabel("")
+        grid[i].set_yticks([])
+
+    for cax in grid.cbar_axes:
+        #cax.toggle_label(True)
+        cax.axis[cax.orientation].set_label('')    
     # save image
     plt.savefig('./images/snap_%3d_comb.png' % snap,dpi=300)
 
